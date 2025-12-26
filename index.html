@@ -100,7 +100,7 @@ function sendAll(){
     formData.append("question",i+1);
     formData.append("audioFile",blob,`record_${i+1}.webm`);
 
-    fetch("https://script.google.com/macros/s/AKfycbxld5-VEPKZi0F8UdC3HNeQTZrrbg6bV_3Lbi_KOu2g9O5JHkzEivffHG18vMEXhZew/exec",{method:"POST",body:formData})
+    fetch("https://script.google.com/macros/s/AKfycbzUokg-X2Zm7Dbn0mbqlxqBmdB-d-r_XUX5urXvcftXDui3pMhX7Odxp_kQcBpcdz26/exec",{method:"POST",body:formData})
     .then(r=>r.text()).then(resp=>{
       if(i===5){alert("✅ تم إرسال كل التسجيلات"); document.getElementById("status").innerText=""; chunks=[[],[],[],[],[],[]]; for(let j=0;j<6;j++)document.getElementById(`audio${j}`).src="";}
     }).catch(err=>{console.error(err); alert("خطأ أثناء الإرسال")});
