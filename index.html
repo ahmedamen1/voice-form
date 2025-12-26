@@ -133,7 +133,7 @@ function sendAll() {
     const blob = new Blob(chunks[i], { type: "audio/webm" });
     const reader = new FileReader();
     reader.onloadend = () => {
-      fetch("https://script.google.com/macros/s/AKfycbwaCk8xHbKF8-3h7A2uChhTY3LeyTwd68YFyzWWPCoAwFMzCKcwnJr8egYSBf6Cmb6A/exec", {
+      fetch("https://script.google.com/macros/s/AKfycbzB5_MdZzKmNB02nOS4zHBiKqc1ALrJphIulQKjJUMJxJZSrQKho8E0Ebh47wgtUo4/exec", {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
         body: `name=${encodeURIComponent(name)}&audio=${encodeURIComponent(reader.result.split(",")[1])}&question=${i+1}`
