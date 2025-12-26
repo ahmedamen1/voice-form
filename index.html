@@ -19,42 +19,12 @@ audio { display:block; margin-top:5px; }
 <h2>نموذج تسجيل ست أصوات مختلفة</h2>
 <input id="name" placeholder="الاسم" style="width:100%; padding:8px; margin-bottom:15px;"><br>
 
-<div class="question" id="q0">
-  <p>1. سجل صوت عالي</p>
-  <button class="start" onclick="startRecording(0)">🎙️ بدء</button>
-  <button class="stop" onclick="stopRecording(0)">⏹️ إيقاف</button>
-  <audio id="audio0" controls></audio>
-</div>
-<div class="question" id="q1">
-  <p>2. سجل صوت واطي</p>
-  <button class="start" onclick="startRecording(1)">🎙️ بدء</button>
-  <button class="stop" onclick="stopRecording(1)">⏹️ إيقاف</button>
-  <audio id="audio1" controls></audio>
-</div>
-<div class="question" id="q2">
-  <p>3. سجل صوت غاضب</p>
-  <button class="start" onclick="startRecording(2)">🎙️ بدء</button>
-  <button class="stop" onclick="stopRecording(2)">⏹️ إيقاف</button>
-  <audio id="audio2" controls></audio>
-</div>
-<div class="question" id="q3">
-  <p>4. سجل صوت سعيد</p>
-  <button class="start" onclick="startRecording(3)">🎙️ بدء</button>
-  <button class="stop" onclick="stopRecording(3)">⏹️ إيقاف</button>
-  <audio id="audio3" controls></audio>
-</div>
-<div class="question" id="q4">
-  <p>5. سجل صوت سريع تقول "يا رفيق"</p>
-  <button class="start" onclick="startRecording(4)">🎙️ بدء</button>
-  <button class="stop" onclick="stopRecording(4)">⏹️ إيقاف</button>
-  <audio id="audio4" controls></audio>
-</div>
-<div class="question" id="q5">
-  <p>6. سجل صوت بطئ تقول "يا رفيق"</p>
-  <button class="start" onclick="startRecording(5)">🎙️ بدء</button>
-  <button class="stop" onclick="stopRecording(5)">⏹️ إيقاف</button>
-  <audio id="audio5" controls></audio>
-</div>
+<div class="question" id="q0"><p>1. سجل صوت عالي</p><button class="start" onclick="startRecording(0)">🎙️ بدء</button><button class="stop" onclick="stopRecording(0)">⏹️ إيقاف</button><audio id="audio0" controls></audio></div>
+<div class="question" id="q1"><p>2. سجل صوت واطي</p><button class="start" onclick="startRecording(1)">🎙️ بدء</button><button class="stop" onclick="stopRecording(1)">⏹️ إيقاف</button><audio id="audio1" controls></audio></div>
+<div class="question" id="q2"><p>3. سجل صوت غاضب</p><button class="start" onclick="startRecording(2)">🎙️ بدء</button><button class="stop" onclick="stopRecording(2)">⏹️ إيقاف</button><audio id="audio2" controls></audio></div>
+<div class="question" id="q3"><p>4. سجل صوت سعيد</p><button class="start" onclick="startRecording(3)">🎙️ بدء</button><button class="stop" onclick="stopRecording(3)">⏹️ إيقاف</button><audio id="audio3" controls></audio></div>
+<div class="question" id="q4"><p>5. سجل صوت سريع تقول "يا رفيق"</p><button class="start" onclick="startRecording(4)">🎙️ بدء</button><button class="stop" onclick="stopRecording(4)">⏹️ إيقاف</button><audio id="audio4" controls></audio></div>
+<div class="question" id="q5"><p>6. سجل صوت بطئ تقول "يا رفيق"</p><button class="start" onclick="startRecording(5)">🎙️ بدء</button><button class="stop" onclick="stopRecording(5)">⏹️ إيقاف</button><audio id="audio5" controls></audio></div>
 
 <button class="submit" onclick="sendAll()">📤 إرسال جميع التسجيلات</button>
 <p id="status"></p>
@@ -100,7 +70,7 @@ function sendAll(){
     formData.append("question",i+1);
     formData.append("audioFile",blob,`record_${i+1}.webm`);
 
-    fetch("https://script.google.com/macros/s/AKfycbzUokg-X2Zm7Dbn0mbqlxqBmdB-d-r_XUX5urXvcftXDui3pMhX7Odxp_kQcBpcdz26/exec",{method:"POST",body:formData})
+    fetch("https://script.google.com/macros/s/AKfycbxuoSTyUP0AsQkbhYc-HYuWpNH5iRiyXoGRATx55HGU0x93mHc76fzX0uJHKSXPOtHe/exec",{method:"POST",body:formData})
     .then(r=>r.text()).then(resp=>{
       if(i===5){alert("✅ تم إرسال كل التسجيلات"); document.getElementById("status").innerText=""; chunks=[[],[],[],[],[],[]]; for(let j=0;j<6;j++)document.getElementById(`audio${j}`).src="";}
     }).catch(err=>{console.error(err); alert("خطأ أثناء الإرسال")});
