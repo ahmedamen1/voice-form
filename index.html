@@ -3,74 +3,140 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Voice Data Collection</title>
+    <title>Voice Data Collection - مشروع رفيق</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; background-color: #f4f4f9; }
-        .container { background: white; padding: 30px; border-radius: 10px; box-shadow: 0 2px 10px rgba(0,0,0,0.1); }
-        h1 { text-align: center; color: #333; }
-        .form-group { margin-bottom: 20px; }
-        label { font-weight: bold; display: block; margin-bottom: 5px; }
-        input[type="text"] { width: 100%; padding: 10px; border: 1px solid #ddd; border-radius: 5px; box-sizing: border-box; }
+        /* General Styles */
+        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; max-width: 800px; margin: 0 auto; padding: 20px; background-color: #f4f4f9; color: #333; }
+        .container { background: white; padding: 30px; border-radius: 12px; box-shadow: 0 4px 15px rgba(0,0,0,0.1); }
         
-        /* Recording Section Styles */
-        .recording-card { border: 1px solid #e0e0e0; padding: 15px; border-radius: 8px; margin-bottom: 15px; background: #fafafa; }
+        /* Headers & Instructions */
+        h1 { text-align: center; color: #2c3e50; margin-bottom: 10px; }
+        .subtitle { text-align: center; color: #7f8c8d; margin-bottom: 30px; font-size: 0.95em; }
+        
+        .instructions { background-color: #e3f2fd; border-left: 5px solid #2196F3; padding: 15px; margin-bottom: 25px; border-radius: 4px; }
+        .instructions h3 { margin-top: 0; color: #1565C0; }
+        .instructions ul { margin-bottom: 0; padding-left: 20px; }
+        .instructions li { margin-bottom: 5px; }
+
+        /* Form Elements */
+        .form-group { margin-bottom: 25px; }
+        label { font-weight: bold; display: block; margin-bottom: 8px; font-size: 1.1em; }
+        input[type="text"] { width: 100%; padding: 12px; border: 2px solid #ddd; border-radius: 6px; font-size: 1em; box-sizing: border-box; transition: border-color 0.3s; }
+        input[type="text"]:focus { border-color: #2196F3; outline: none; }
+        
+        /* Recording Card Styles */
+        .recording-card { border: 1px solid #e0e0e0; padding: 20px; border-radius: 10px; margin-bottom: 20px; background: #fafafa; transition: all 0.3s ease; }
+        .recording-card:hover { box-shadow: 0 2px 8px rgba(0,0,0,0.05); }
         .recording-card.done { border-color: #4CAF50; background: #e8f5e9; }
-        .card-header { font-weight: bold; margin-bottom: 10px; color: #555; }
         
-        .controls button { padding: 8px 15px; border: none; border-radius: 4px; cursor: pointer; margin-right: 5px; font-size: 14px; }
-        .btn-record { background-color: #d32f2f; color: white; }
-        .btn-stop { background-color: #555; color: white; }
+        .card-header { margin-bottom: 15px; border-bottom: 1px solid #eee; padding-bottom: 10px; }
+        .task-en { font-weight: bold; font-size: 1.1em; color: #2c3e50; display: block; }
+        .task-ar { font-size: 1em; color: #16a085; display: block; margin-top: 5px; direction: rtl; unicode-bidi: embed; }
+        
+        /* Buttons */
+        .controls { display: flex; align-items: center; gap: 10px; flex-wrap: wrap; }
+        .controls button { padding: 10px 20px; border: none; border-radius: 6px; cursor: pointer; font-size: 14px; font-weight: 600; transition: background 0.2s; }
+        
+        .btn-record { background-color: #e74c3c; color: white; }
+        .btn-record:hover { background-color: #c0392b; }
+        .btn-record:disabled { background-color: #e0e0e0; cursor: not-allowed; }
+
+        .btn-stop { background-color: #34495e; color: white; }
+        .btn-stop:hover { background-color: #2c3e50; }
         .btn-stop:disabled { opacity: 0.5; cursor: not-allowed; }
         
-        audio { display: block; margin-top: 10px; width: 100%; height: 30px; }
+        audio { display: block; margin-top: 15px; width: 100%; height: 35px; border-radius: 20px; }
         
-        .status { font-size: 0.9em; color: #666; margin-left: 10px; }
+        .status { font-size: 0.9em; color: #666; margin-left: auto; font-style: italic; }
         
         /* Submit Area */
-        .submit-area { text-align: center; margin-top: 30px; }
-        .btn-submit { background-color: #2196F3; color: white; padding: 12px 30px; font-size: 16px; border: none; border-radius: 5px; cursor: pointer; }
-        .btn-submit:disabled { background-color: #ccc; cursor: not-allowed; }
+        .submit-area { text-align: center; margin-top: 40px; padding-top: 20px; border-top: 2px dashed #ddd; }
+        .btn-submit { background-color: #2196F3; color: white; padding: 15px 40px; font-size: 18px; border: none; border-radius: 8px; cursor: pointer; box-shadow: 0 4px 6px rgba(0,0,0,0.1); transition: transform 0.1s; }
+        .btn-submit:hover { background-color: #1976D2; transform: translateY(-2px); }
+        .btn-submit:active { transform: translateY(0); }
+        .btn-submit:disabled { background-color: #b0bec5; cursor: not-allowed; transform: none; }
         
-        #final-status { margin-top: 15px; font-weight: bold; }
+        #final-status { margin-top: 20px; font-weight: bold; font-size: 1.1em; }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>Voice Data Collection</h1>
-    <p>Please record all 6 samples below.</p>
+    <h1>Rafeeq Project - Voice Collection</h1>
+    <div class="subtitle">تجميع البيانات الصوتية لمشروع رفيق</div>
+
+    <div class="instructions">
+        <h3>📋 Instructions / التعليمات</h3>
+        <ul>
+            <li>Please enter your name below. <br> يرجى كتابة اسمك بالأسفل.</li>
+            <li>Record all 6 samples ensuring clear audio. <br> قم بتسجيل المحاولات الستة وتأكد من وضوح الصوت.</li>
+            <li>Press <strong>Submit</strong> only after finishing all recordings. <br> اضغط على "إرسال" فقط بعد الانتهاء من جميع التسجيلات.</li>
+        </ul>
+    </div>
 
     <div class="form-group">
-        <label for="username">Your Name:</label>
-        <input type="text" id="username" placeholder="Enter your full name" required>
+        <label for="username">Participant Name / اسم المشارك:</label>
+        <input type="text" id="username" placeholder="Ahmed Amin..." required>
     </div>
 
     <div id="recorders-list"></div>
 
     <div class="submit-area">
-        <button id="submit-btn" class="btn-submit" onclick="submitAll()">Submit All Recordings</button>
+        <button id="submit-btn" class="btn-submit" onclick="submitAll()">
+            Submit All Recordings <br> إرسال جميع التسجيلات
+        </button>
         <div id="final-status"></div>
     </div>
 </div>
 
 <script>
     // --- CONFIGURATION ---
-    // PASTE YOUR GOOGLE APPS SCRIPT WEB APP URL BELOW
+    // 🔴 IMPORTANT: PASTE YOUR GOOGLE APPS SCRIPT WEB APP URL HERE 🔴
     const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbwTIydD75e6oLzxnz9WeZYX2WkAN-pU8Bz0xz4T_Yt4it-dPhVPDw2Og7fMs74B8DsM/exec';
 
-    // Questions Configuration
+    // Questions Configuration (Bilingual)
     const questions = [
-        { id: 'q1', text: '1. Normal Loud Voice' },
-        { id: 'q2', text: '2. Soft / Whisper Voice' },
-        { id: 'q3', text: '3. Angry Voice' },
-        { id: 'q4', text: '4. Happy Voice' },
-        { id: 'q5', text: '5. Fast Speed: "Ya Rafeeq"' },
-        { id: 'q6', text: '6. Slow Speed: "Ya Rafeeq"' }
+        { 
+            id: 'q1', 
+            textEn: '1. Normal Loud Voice', 
+            textAr: '١. صوت عالي وطبيعي (تخيل أنك تنادي شخصاً بعيداً)',
+            label: 'Loud Voice'
+        },
+        { 
+            id: 'q2', 
+            textEn: '2. Soft / Whisper Voice', 
+            textAr: '٢. صوت هادئ ومنخفض (تخيل أنك تتحدث في مكتبة)',
+            label: 'Soft Voice'
+        },
+        { 
+            id: 'q3', 
+            textEn: '3. Angry / Agitated Voice', 
+            textAr: '٣. صوت غاضب أو منفعل',
+            label: 'Angry Voice'
+        },
+        { 
+            id: 'q4', 
+            textEn: '4. Happy / Cheerful Voice', 
+            textAr: '٤. صوت سعيد ومبتهج',
+            label: 'Happy Voice'
+        },
+        { 
+            id: 'q5', 
+            textEn: '5. Fast Speed: "Ya Rafeeq"', 
+            textAr: '٥. قل بسرعة: "يا رفيق"',
+            label: 'Fast "Ya Rafeeq"'
+        },
+        { 
+            id: 'q6', 
+            textEn: '6. Slow Speed: "Ya Rafeeq"', 
+            textAr: '٦. قل ببطء ووضوح: "يا رفيق"',
+            label: 'Slow "Ya Rafeeq"'
+        }
     ];
 
     // State management
-    const recordings = {}; // Stores Blobs: { q1: blob, q2: blob ... }
-    const mediaRecorders = {}; // Stores active MediaRecorder instances
+    const recordings = {}; 
+    const mediaRecorders = {}; 
 
     // Initialize UI
     const list = document.getElementById('recorders-list');
@@ -80,11 +146,14 @@
         div.className = 'recording-card';
         div.id = `card-${q.id}`;
         div.innerHTML = `
-            <div class="card-header">${q.text}</div>
+            <div class="card-header">
+                <span class="task-en">${q.textEn}</span>
+                <span class="task-ar">${q.textAr}</span>
+            </div>
             <div class="controls">
-                <button class="btn-record" onclick="startRecording('${q.id}')">Start</button>
-                <button class="btn-stop" onclick="stopRecording('${q.id}')" disabled>Stop</button>
-                <span class="status" id="status-${q.id}">Not recorded</span>
+                <button class="btn-record" onclick="startRecording('${q.id}')">Start Record / ابدأ</button>
+                <button class="btn-stop" onclick="stopRecording('${q.id}')" disabled>Stop / توقف</button>
+                <span class="status" id="status-${q.id}">Waiting... / في الانتظار</span>
             </div>
             <audio id="audio-${q.id}" controls style="display:none;"></audio>
         `;
@@ -108,22 +177,26 @@
                 const audioEl = document.getElementById(`audio-${id}`);
                 audioEl.src = URL.createObjectURL(blob);
                 audioEl.style.display = 'block';
-                document.getElementById(`status-${id}`).innerText = "Recorded ✓";
+                
+                const statusSpan = document.getElementById(`status-${id}`);
+                statusSpan.innerText = "Recorded ✓ / تم التسجيل";
+                statusSpan.style.color = "green";
+                
                 document.getElementById(`card-${id}`).classList.add('done');
                 
-                // Stop all tracks to release mic
+                // Stop tracks
                 stream.getTracks().forEach(track => track.stop());
             };
 
             mediaRecorder.start();
             mediaRecorders[id] = mediaRecorder;
 
-            // Toggle buttons
             toggleButtons(id, true);
-            document.getElementById(`status-${id}`).innerText = "Recording...";
+            document.getElementById(`status-${id}`).innerText = "Recording... 🎙️ / جاري التسجيل";
+            document.getElementById(`status-${id}`).style.color = "#d32f2f";
 
         } catch (err) {
-            alert("Microphone access denied or error: " + err);
+            alert("Error accessing microphone: " + err);
         }
     }
 
@@ -141,7 +214,8 @@
         
         startBtn.disabled = isRecording;
         stopBtn.disabled = !isRecording;
-        startBtn.style.backgroundColor = isRecording ? '#ccc' : '#d32f2f';
+        // Make 'Start' grey when recording, Red when not
+        startBtn.style.backgroundColor = isRecording ? '#ccc' : '#e74c3c';
     }
 
     // --- Submission Logic ---
@@ -150,20 +224,18 @@
         const statusDiv = document.getElementById('final-status');
         const btn = document.getElementById('submit-btn');
 
-        // Validation
         if (!name) {
-            alert("Please enter your name.");
+            alert("Please enter your name first.\nيرجى إدخال اسمك أولاً.");
             return;
         }
         if (Object.keys(recordings).length < questions.length) {
-            alert(`You have only recorded ${Object.keys(recordings).length} out of ${questions.length} samples.`);
+            alert(`You recorded ${Object.keys(recordings).length} out of ${questions.length}.\nلقد سجلت ${Object.keys(recordings).length} فقط من أصل ${questions.length}.`);
             return;
         }
 
         btn.disabled = true;
-        statusDiv.innerText = "Preparing to upload...";
+        statusDiv.innerText = "Preparing to upload... / جاري التحضير...";
 
-        // Helper: Convert Blob to Base64
         const blobToBase64 = blob => new Promise((resolve, reject) => {
             const reader = new FileReader();
             reader.onloadend = () => resolve(reader.result);
@@ -172,21 +244,19 @@
         });
 
         try {
-            // Upload sequentially to ensure stability
             let count = 0;
             for (const q of questions) {
                 const blob = recordings[q.id];
-                statusDiv.innerText = `Uploading ${count + 1}/${questions.length}: ${q.text}...`;
+                statusDiv.innerText = `Uploading ${count + 1}/${questions.length}... (${q.label})`;
                 
                 const base64Data = await blobToBase64(blob);
                 
                 const formData = new FormData();
                 formData.append("name", name);
-                formData.append("question", q.text);
+                formData.append("question", q.label); // We send the clean label to the Sheet
                 formData.append("audio_data", base64Data);
                 formData.append("mime_type", blob.type);
 
-                // Note: We do NOT set Content-Type header manually; fetch handles FormData boundary.
                 await fetch(SCRIPT_URL, {
                     method: 'POST',
                     body: formData
@@ -195,13 +265,13 @@
                 count++;
             }
             
-            statusDiv.innerText = "✅ All files submitted successfully!";
+            statusDiv.innerHTML = "✅ All files submitted successfully! <br> تم إرسال جميع الملفات بنجاح!";
             statusDiv.style.color = "green";
-            alert("Success! Thank you.");
+            alert("Thank you! Submission complete.");
 
         } catch (error) {
             console.error(error);
-            statusDiv.innerText = "❌ Error during upload. Check console.";
+            statusDiv.innerText = "❌ Error during upload. Check internet connection.";
             statusDiv.style.color = "red";
             btn.disabled = false;
         }
