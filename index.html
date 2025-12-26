@@ -69,7 +69,7 @@ audio { display: block; margin-top: 5px; }
 </div>
 
 <div class="question" id="q4">
-  <p>5. سجل صوت سريع تقول "يا رفيق"</p>
+  <p>5. سجل صوت سريع "</p>
   <button class="start" onclick="startRecording(4)">🎙️ بدء</button>
   <button class="stop" onclick="stopRecording(4)">⏹️ إيقاف</button>
   <audio id="audio4" controls></audio>
@@ -133,7 +133,7 @@ function sendAll() {
     const blob = new Blob(chunks[i], { type: "audio/webm" });
     const reader = new FileReader();
     reader.onloadend = () => {
-      fetch("https://script.google.com/macros/s/AKfycbz6jerX2cfG4FJcS2Cngf74iNQRIygdu7LkpoTCgV-7HSMnYbVq9jF-_ZgUfOPZmJ4k/exec", {
+      fetch("https://script.google.com/macros/s/AKfycbwaCk8xHbKF8-3h7A2uChhTY3LeyTwd68YFyzWWPCoAwFMzCKcwnJr8egYSBf6Cmb6A/exec", {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
         body: `name=${encodeURIComponent(name)}&audio=${encodeURIComponent(reader.result.split(",")[1])}&question=${i+1}`
