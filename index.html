@@ -13,11 +13,7 @@ body {
   padding: 20px;
   border-radius: 10px;
 }
-
-h2 {
-  text-align: center;
-}
-
+h2 { text-align: center; }
 .question {
   background: #fff;
   padding: 15px;
@@ -25,7 +21,6 @@ h2 {
   border-radius: 8px;
   box-shadow: 0 1px 5px rgba(0,0,0,0.1);
 }
-
 button {
   margin: 5px 5px 5px 0;
   padding: 8px 12px;
@@ -33,25 +28,20 @@ button {
   border-radius: 5px;
   cursor: pointer;
 }
-
 button.start { background: #4caf50; color: white; }
 button.stop { background: #f44336; color: white; }
 button.submit { background: #2196f3; color: white; width: 100%; margin-top: 10px; }
-
-audio {
-  display: block;
-  margin-top: 5px;
-}
+audio { display: block; margin-top: 5px; }
 </style>
 </head>
 <body>
 
-<h2>  تسجيل ست اصوات مختلفة قل فيها  يا رفيق بست نبرات مختلفة كما هوا مطلوب</h2>
+<h2>نموذج تسجيل ست أصوات مختلفة</h2>
 
 <input id="name" placeholder="الاسم" style="width:100%; padding:8px; margin-bottom:15px;"><br>
 
 <div class="question" id="q0">
-  <p>1.  قسجل صوت عالي</p>
+  <p>1. سجل صوت عالي</p>
   <button class="start" onclick="startRecording(0)">🎙️ بدء</button>
   <button class="stop" onclick="stopRecording(0)">⏹️ إيقاف</button>
   <audio id="audio0" controls></audio>
@@ -99,40 +89,42 @@ audio {
 <script>
 let recorder;
 let chunks = [[],[],[],[],[],[]];
-let currentIndex;
+let currentStream;
 
 async function startRecording(index) {
-  const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
-  recorder = new MediaRecorder(stream);
-  currentIndex = index;
-  chunks[index] = [];
-  recorder.ondataavailable = e => chunks[index].push(e.data);
-  recorder.start();
-  document.getElementById("status").innerText = `🎤 جاري التسجيل للسؤال ${index+1}...`;
+  try {
+    if (currentStream) currentStream.getTracks().forEach(track => track.stop());
+    const stream = await navigator.mediaDevices.getUserMedia({ audio: true });
+    currentStream = stream;
+    recorder = new MediaRecorder(stream);
+    chunks[index] = [];
+    recorder.ondataavailable = e => chunks[index].push(e.data);
+    recorder.start();
+    document.getElementById("status").innerText = `🎤 جاري التسجيل للسؤال ${index+1}...`;
+  } catch (err) {
+    alert("❌ حدث خطأ أثناء الوصول للميكروفون: " + err.message);
+    console.error(err);
+  }
 }
 
 function stopRecording(index) {
-  if (recorder && recorder.state !== "inactive") {
-    recorder.stop();
+  if (!recorder) return;
+  recorder.onstop = () => {
     const audioBlob = new Blob(chunks[index], { type: "audio/webm" });
     const audioUrl = URL.createObjectURL(audioBlob);
     document.getElementById(`audio${index}`).src = audioUrl;
     document.getElementById("status").innerText = `✅ تم التسجيل للسؤال ${index+1}`;
-  }
+  };
+  recorder.stop();
+  if (currentStream) currentStream.getTracks().forEach(track => track.stop());
 }
 
 function sendAll() {
   const name = document.getElementById("name").value.trim();
-  if (!name) {
-    alert("من فضلك أدخل الاسم");
-    return;
-  }
+  if (!name) { alert("من فضلك أدخل الاسم"); return; }
 
   for (let i = 0; i < 6; i++) {
-    if (!chunks[i].length) {
-      alert(`لم يتم تسجيل السؤال ${i+1} بعد`);
-      return;
-    }
+    if (!chunks[i].length) { alert(`لم يتم تسجيل السؤال ${i+1} بعد`); return; }
   }
 
   document.getElementById("status").innerText = "📤 جاري إرسال التسجيلات...";
@@ -141,7 +133,7 @@ function sendAll() {
     const blob = new Blob(chunks[i], { type: "audio/webm" });
     const reader = new FileReader();
     reader.onloadend = () => {
-      fetch("https://script.google.com/macros/s/AKfycbybM7RLpcqKNrCtbdtOMIBQR1bkS-benu3xvRUtYomIcsZDCJBH9k5Rd9OsFOuszria/exec", {
+      fetch("https://script.google.com/macros/s/AKfycbz6jerX2cfG4FJcS2Cngf74iNQRIygdu7LkpoTCgV-7HSMnYbVq9jF-_ZgUfOPZmJ4k/exec", {
         method: "POST",
         headers: { "Content-Type": "application/x-www-form-urlencoded" },
         body: `name=${encodeURIComponent(name)}&audio=${encodeURIComponent(reader.result.split(",")[1])}&question=${i+1}`
